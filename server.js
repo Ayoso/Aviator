@@ -81,10 +81,3 @@ app.post('/get-coefficients', (req, res) => {
         res.status(500).json({ error: 'Ошибка при генерации коэффициентов' });
     }
 });
-
-// Запуск сервера
-app.listen(PORT, () => {
-    console.log(`Сервер работает на порту ${PORT}`);
-}).on('error', (err) => {
-    console.error(`Не удалось запустить сервер на порту ${PORT}: ${err.message}`);
-});
