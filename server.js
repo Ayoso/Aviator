@@ -91,3 +91,5 @@ app.listen(PORT, () => {
 }).on('error', (err) => {
     console.error(`Не удалось запустить сервер на порту ${PORT}: ${err.message}`);
 });
+
+module.exports = app; // Экспорт сервера
