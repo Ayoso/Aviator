@@ -8,7 +8,10 @@ const app = express();
 const PORT = process.env.PORT || 3002;
 
 // Настройка Телеграм бота
-const token = '7291288644:AAGtKXABZ57GOj1Jxq1WelMZuAitlSN8At4'; // замените на ваш токен Телеграм бота
+const token = process.env.TELEGRAM_BOT_TOKEN; // убедитесь, что переменная окружения TELEGRAM_BOT_TOKEN установлена
+if (!token) {
+    throw new Error('TELEGRAM_BOT_TOKEN is not defined');
+}
 const bot = new TelegramBot(token, { polling: true });
 
 bot.onText(/\/start/, (msg) => {
@@ -80,4 +83,11 @@ app.post('/get-coefficients', (req, res) => {
         console.error('Ошибка при генерации коэффициентов:', error);
         res.status(500).json({ error: 'Ошибка при генерации коэффициентов' });
     }
+});
+
+// Запуск сервера
+app.listen(PORT, () => {
+    console.log(`Сервер работает на порту ${PORT}`);
+}).on('error', (err) => {
+    console.error(`Не удалось запустить сервер на порту ${PORT}: ${err.message}`);
 });
