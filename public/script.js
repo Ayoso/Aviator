@@ -1,4 +1,4 @@
-const webAppUrl = 'https://web-app3-ndcdc30l6-ayosos-projects.vercel.app'; // Замените на ваш URL
+const webAppUrl = 'https://aviator-ivory.vercel.app'; // Замените на ваш URL
 
 const coefficientsContainer = document.getElementById('coefficientsContainer');
 const timeContainer = document.getElementById('timeContainer');
