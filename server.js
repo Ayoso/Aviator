@@ -1,59 +1,120 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const path = require('path');
 const TelegramBot = require('node-telegram-bot-api');
+const path = require('path');
 
-const app = express();
-const PORT = process.env.PORT || 3002;
+const token = process.env.TELEGRAM_BOT_TOKEN || '7291288644:AAGtKXABZ57GOj1Jxq1WelMZuAitlSN8At4';
+const webAppUrl = 'web-app3-ga4qm6iep-ayosos-projects.vercel.app/'; // URL вашего WebApp3
+const activationPassword = '548935'; // Ваш пароль активации
 
-// Настройка Телеграм бота
-const token = process.env.TELEGRAM_BOT_TOKEN; // убедитесь, что переменная окружения TELEGRAM_BOT_TOKEN установлена
-if (!token) {
-    throw new Error('TELEGRAM_BOT_TOKEN is not defined');
-}
 const bot = new TelegramBot(token, { polling: true });
+const app = express();
+const PORT = process.env.PORT || 8000;
 
-bot.onText(/\/start/, (msg) => {
-    const chatId = msg.chat.id;
-    bot.sendMessage(chatId, 'Добро пожаловать в Телеграм бот Aviator!')
-        .then(() => {
-            console.log(`Сообщение отправлено в чат ${chatId}`);
-        })
-        .catch((error) => {
-            console.error(`Ошибка отправки сообщения в чат ${chatId}: ${error}`);
-        });
-});
-
-// Логирование запросов
-app.use((req, res, next) => {
-    console.log(`${req.method} ${req.url}`);
-    next();
-});
-
-// Настройка middlewares
 app.use(bodyParser.json());
 app.use(cors());
-
-// Сервировка статических файлов из WebApp3
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Маршрут для проверки доступности сервера
-app.get('/ping', (req, res) => {
-    res.send('pong');
+let currentCoefficients = generateRandomCoefficients();
+
+const userLanguage = {};
+
+bot.on('message', async (msg) => {
+    const chatId = msg.chat.id;
+    const text = msg.text;
+
+    if (text === '/start') {
+        await bot.sendMessage(chatId, 'Dilni tanlang:', {
+            reply_markup: {
+                keyboard: [
+                    [{ text: 'Oʻzbekcha' }, { text: 'Türkçe' }]
+                ],
+                one_time_keyboard: true
+            }
+        });
+
+        bot.once('message', async (msg) => {
+            const chosenLanguage = msg.text.toLowerCase();
+
+            if (chosenLanguage.includes('узбек') || chosenLanguage.includes('oʻzbek')) {
+                userLanguage[chatId] = 'uzbek';
+                await bot.sendMessage(chatId, 'Endi siz signal olishingiz mumkin', {
+                    reply_markup: {
+                        remove_keyboard: true
+                    }
+                });
+            } else if (chosenLanguage.includes('турецкий') || chosenLanguage.includes('türkçe')) {
+                userLanguage[chatId] = 'turkish';
+                await bot.sendMessage(chatId, 'Aktivasyon tamamlandı! Artık sinyal alabilirsiniz', {
+                    reply_markup: {
+                        remove_keyboard: true
+                    }
+                });
+            } else {
+                await bot.sendMessage(chatId, 'Dilni tanlagan tilni tanlang: Oʻzbekcha yoki Türkçe / Dilni tanlagan tilni tanlang: Oʻzbekcha yoki Türkçe');
+            }
+
+            await bot.sendMessage(chatId, 'faollashtirish parolingizni kiriting: / aktivasyon şifrenizi girin', {
+                reply_markup: {
+                    force_reply: true
+                }
+            });
+        });
+    } else if (text === activationPassword) {
+        const lang = userLanguage[chatId] || 'uzbek';
+        const activationMessage = lang === 'uzbek' ? 'Aktivasyon tamamlandı! Artık sinyal alabilirsiniz' : 'Aktivasyon tamamlandı! Artık sinyal alabilirsiniz';
+
+        await bot.sendMessage(chatId, activationMessage, {
+            reply_markup: {
+                keyboard: [
+                    [{ text: 'SİNYAL AL / SIGNAL OLISH', web_app: { url: webAppUrl + '/form' } }]
+                ]
+            }
+        });
+
+        await bot.sendMessage(chatId, 'Davom etish uchun "SIGNAL QABUL QILISh" tugmasini bosing. / Devam etmek için "SİNYALİ AL" düğmesine tıklayın.', {
+            reply_markup: {
+                inline_keyboard: [
+                    [{ text: 'SİNYAL AL / SIGNAL OLISH', web_app: { url: webAppUrl } }]
+                ]
+            }
+        });
+    } else {
+        const lang = userLanguage[chatId] || 'uzbek';
+        const errorMessage = lang === 'uzbek' ? 'Yanlış şifre. Lütfen tekrar deneyin.' : 'Yanlış şifre. Lütfen tekrar deneyin.';
+
+        await bot.sendMessage(chatId, errorMessage);
+    }
 });
 
-// Генерация случайных коэффициентов
-function generateRandomCoefficients() {
-    let coefficient1, coefficient2;
-    do {
-        coefficient1 = (Math.random() * 2.7 + 2.3).toFixed(2);
-        coefficient2 = (Math.random() * 3.5 + parseFloat(coefficient1) + 1).toFixed(2);
-    } while (parseFloat(coefficient1) >= parseFloat(coefficient2));
-    return { coefficient1, coefficient2 };
-}
+app.post('/web-data', async (req, res) => {
+    const { queryId } = req.body;
 
-let currentCoefficients = generateRandomCoefficients();
+    try {
+        currentCoefficients = generateRandomCoefficients();
+
+        await bot.answerWebAppQuery(queryId, {
+            type: 'article',
+            id: queryId,
+            title: 'Коэффициенты обновлены',
+            input_message_content: {
+                message_text: `${currentCoefficients[0]}X - ${currentCoefficients[1]}X`
+            }
+        });
+
+        return res.status(200).json({});
+    } catch (e) {
+        console.error('Ошибка при обновлении коэффициентов:', e);
+        return res.status(500).json({ error: 'Ошибка при обновлении коэффициентов' });
+    }
+});
+
+function generateRandomCoefficients() {
+    const coefficient1 = (Math.random() * 5 + 1).toFixed(2);
+    const coefficient2 = (Math.random() * 5 + 1).toFixed(2);
+    return [coefficient1, coefficient2];
+}
 
 // Обработка GET-запросов для /get-coefficients
 app.get('/get-coefficients', (req, res) => {
@@ -61,8 +122,8 @@ app.get('/get-coefficients', (req, res) => {
         currentCoefficients = generateRandomCoefficients();
         console.log('Отправка коэффициентов:', currentCoefficients);
         res.json({
-            coefficient1: parseFloat(currentCoefficients.coefficient1),
-            coefficient2: parseFloat(currentCoefficients.coefficient2)
+            coefficient1: parseFloat(currentCoefficients[0]),
+            coefficient2: parseFloat(currentCoefficients[1])
         });
     } catch (error) {
         console.error('Ошибка при генерации коэффициентов:', error);
@@ -76,8 +137,8 @@ app.post('/get-coefficients', (req, res) => {
         currentCoefficients = generateRandomCoefficients();
         console.log('Отправка коэффициентов:', currentCoefficients);
         res.json({
-            coefficient1: parseFloat(currentCoefficients.coefficient1),
-            coefficient2: parseFloat(currentCoefficients.coefficient2)
+            coefficient1: parseFloat(currentCoefficients[0]),
+            coefficient2: parseFloat(currentCoefficients[1])
         });
     } catch (error) {
         console.error('Ошибка при генерации коэффициентов:', error);
@@ -85,9 +146,14 @@ app.post('/get-coefficients', (req, res) => {
     }
 });
 
-// Запуск сервера
+// Логирование запросов
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`);
+    next();
+});
+
 app.listen(PORT, () => {
-    console.log(`Сервер работает на порту ${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 }).on('error', (err) => {
     console.error(`Не удалось запустить сервер на порту ${PORT}: ${err.message}`);
 });
