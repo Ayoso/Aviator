@@ -4,16 +4,22 @@ const cors = require('cors');
 const TelegramBot = require('node-telegram-bot-api');
 const path = require('path');
 
-const token = process.env.TELEGRAM_BOT_TOKEN || '7291288644:AAGtKXABZ57GOj1Jxq1WelMZuAitlSN8At4';
-const webAppUrl = 'web-app3-ga4qm6iep-ayosos-projects.vercel.app/'; // URL вашего WebApp3
+const token = process.env.TELEGRAM_BOT_TOKEN || 'YOUR_TELEGRAM_BOT_TOKEN';
+const webAppUrl = 'https://web-app3-60pmpbo6a-ayosos-projects.vercel.app/'; // URL вашего WebApp3
 const activationPassword = '548935'; // Ваш пароль активации
 
 const bot = new TelegramBot(token, { polling: true });
 const app = express();
 const PORT = process.env.PORT || 8000;
 
+// Настройка CORS для разрешения доступа только из нужных источников
+app.use(cors({
+    origin: ['https://aviator-ivory.vercel.app', 'https://web-app3-60pmpbo6a-ayosos-projects.vercel.app'],
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type']
+}));
+
 app.use(bodyParser.json());
-app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 let currentCoefficients = generateRandomCoefficients();
