@@ -158,4 +158,10 @@ app.listen(PORT, () => {
     console.error(`Не удалось запустить сервер на порту ${PORT}: ${err.message}`);
 });
 
+app.use(cors({
+    origin: ['https://aviator-ivory.vercel.app', 'https://web-app3-ndcdc30l6-ayosos-projects.vercel.app'],
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type']
+}));
+
 module.exports = app; // Экспорт сервера
