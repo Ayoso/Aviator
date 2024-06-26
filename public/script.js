@@ -1,4 +1,4 @@
-const webAppUrl = 'https://aviator-kttwu0148-ayosos-projects.vercel.app/'; // Основной URL вашего задеплоенного WebApp3
+const webAppUrl = 'https://aviator-icony.vercel.app'; // Основной URL вашего задеплоенного WebApp3
 
 const coefficientsContainer = document.getElementById('coefficientsContainer');
 const timeContainer = document.getElementById('timeContainer');

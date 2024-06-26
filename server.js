@@ -5,15 +5,22 @@ const TelegramBot = require('node-telegram-bot-api');
 const path = require('path');
 
 const token = process.env.TELEGRAM_BOT_TOKEN || '7291288644:AAGtKXABZ57GOj1Jxq1WelMZuAitlSN8At4';
-const webAppUrl = 'https://aviator-kttwu0148-ayosos-projects.vercel.app/'; // URL вашего WebApp
+const webAppUrl = 'https://aviator-icony.vercel.app'; // URL вашего WebApp
 const activationPassword = '555'; // Ваш пароль активации
 
 const bot = new TelegramBot(token, { polling: true });
 const app = express();
 const PORT = process.env.PORT || 8000;
+const corsOptions = {
+    origin: 'https://aviator-ivory.vercel.app',
+    optionsSuccessStatus: 200
+};
 
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+    origin: ['https://aviator-kttwu0148-ayosos-projects.vercel.app', 'https://aviator-ivory.vercel.app'] // Добавьте оба домена
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 let currentCoefficients = generateRandomCoefficients();
