@@ -3,12 +3,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const TelegramBot = require('node-telegram-bot-api');
 const path = require('path');
-const punycode = require('punycode/');
-const util = require('util');
-const oldObject = {a: 1};
-const newObject = Object.assign({}, oldObject); // новый
+
 const token = process.env.TELEGRAM_BOT_TOKEN || '7291288644:AAGtKXABZ57GOj1Jxq1WelMZuAitlSN8At4';
-const webAppUrl = 'https://aviator-ivory.vercel.app'; // URL вашего WebApp
+const webAppUrl = 'https://aviator-kttwu0148-ayosos-projects.vercel.app/'; // URL вашего WebApp
 const activationPassword = '555'; // Ваш пароль активации
 
 const bot = new TelegramBot(token, { polling: true });
