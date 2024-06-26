@@ -1,4 +1,4 @@
-const webAppUrl = 'aviator-ivory.vercel.app'; // Основной URL вашего задеплоенного WebApp3
+const webAppUrl = 'https://aviator-ivory.vercel.app'; // Основной URL вашего задеплоенного WebApp3
 
 const coefficientsContainer = document.getElementById('coefficientsContainer');
 const timeContainer = document.getElementById('timeContainer');
