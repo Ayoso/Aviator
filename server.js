@@ -3,10 +3,11 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const TelegramBot = require('node-telegram-bot-api');
 const path = require('path');
+const punycode = require('punycode/');
 
 const token = process.env.TELEGRAM_BOT_TOKEN || '7291288644:AAGtKXABZ57GOj1Jxq1WelMZuAitlSN8At4';
-const webAppUrl = 'https://aviator-nxt81fek4-ayosos-projects.vercel.app'; // URL вашего WebApp
-const activationPassword = '5555'; // Ваш пароль активации
+const webAppUrl = 'https://aviator-ivory.vercel.app'; // URL вашего WebApp
+const activationPassword = '555'; // Ваш пароль активации
 
 const bot = new TelegramBot(token, { polling: true });
 const app = express();
@@ -151,3 +152,11 @@ app.use((req, res, next) => {
     console.log(`${req.method} ${req.url}`);
     next();
 });
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+}).on('error', (err) => {
+    console.error(`Не удалось запустить сервер на порту ${PORT}: ${err.message}`);
+});
+
+module.exports = app; // Экспорт сервера
