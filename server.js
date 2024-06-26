@@ -5,7 +5,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const path = require('path');
 
 const token = process.env.TELEGRAM_BOT_TOKEN || '7291288644:AAGtKXABZ57GOj1Jxq1WelMZuAitlSN8At4';
-const webAppUrl = 'https://aviator-nxt81fek4-ayosos-projects.vercel.app/'; // URL вашего WebApp3
+const webAppUrl = 'aviator-ivory.vercel.app'; // URL вашего WebApp3
 const activationPassword = '548935'; // Ваш пароль активации
 
 const bot = new TelegramBot(token, { polling: true });
