@@ -12,14 +12,14 @@ const bot = new TelegramBot(token, { polling: true });
 const app = express();
 const PORT = process.env.PORT || 8000;
 const corsOptions = {
-    origin: 'https://aviator-ivory.vercel.app',
+    origin: 'https://aviator-icony.vercel.app',
     optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(cors({
-    origin: ['https://aviator-icony.vercel.app', 'https://aviator-icony.vercel.app'] // Добавьте оба домена
+    origin: ['https://aviator-icony.vercel.app'] // Добавьте оба домена
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
