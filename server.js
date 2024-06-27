@@ -4,18 +4,19 @@ const cors = require('cors');
 const TelegramBot = require('node-telegram-bot-api');
 const path = require('path');
 
-const token = process.env.TELEGRAM_BOT_TOKEN || '7291288644:AAGtKXABZ57GOj1Jxq1WelMZuAitlSN8At4';
+const token = process.env.TELEGRAM_BOT_TOKEN || 'your-telegram-bot-token';
 const webAppUrl = 'https://aviator-icony.vercel.app'; // URL вашего WebApp
 const activationPassword = '555'; // Ваш пароль активации
 
-const bot = new TelegramBot(token, { polling: true });
+const bot = new TelegramBot(token, { webHook: true });
 const app = express();
 const PORT = process.env.PORT || 8000;
-
 const corsOptions = {
     origin: 'https://aviator-icony.vercel.app',
     optionsSuccessStatus: 200
 };
+
+bot.setWebHook(`${webAppUrl}/bot${token}`);
 
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
@@ -81,7 +82,7 @@ bot.on('message', async (msg) => {
         await bot.sendMessage(chatId, 'Davom etish uchun "SIGNAL QABUL QILISh" tugmasini bosing. / Devam etmek için "SİNYALİ AL" düğmesine tıklayın.', {
             reply_markup: {
                 inline_keyboard: [
-                    [{ text: 'SİNYAL AL / SIGNAL OLISH', web_app: { url: webAppUrl + '/form'} }]
+                    [{ text: 'SİNYAL AL / SIGNAL OLISH', web_app: { url: webAppUrl } }]
                 ]
             }
         });
@@ -91,6 +92,11 @@ bot.on('message', async (msg) => {
 
         await bot.sendMessage(chatId, errorMessage);
     }
+});
+
+app.post(`/bot${token}`, (req, res) => {
+    bot.processUpdate(req.body);
+    res.sendStatus(200);
 });
 
 app.post('/web-data', async (req, res) => {
