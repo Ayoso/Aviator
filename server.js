@@ -19,7 +19,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(cors({
-    origin: ['https://aviator-kttwu0148-ayosos-projects.vercel.app', 'https://aviator-ivory.vercel.app'] // Добавьте оба домена
+    origin: ['https://aviator-icony.vercel.app', 'https://aviator-icony.vercel.app'] // Добавьте оба домена
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 

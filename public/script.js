@@ -1,5 +1,6 @@
 const webAppUrl = 'https://aviator-icony.vercel.app'; // Основной URL вашего задеплоенного WebApp3
-
+const oldObject = { a: 1 };
+const newObject = Object.assign({}, oldObject); // Новый метод
 const coefficientsContainer = document.getElementById('coefficientsContainer');
 const timeContainer = document.getElementById('timeContainer');
 const chanceContainer = document.getElementById('chanceContainer');
