@@ -4,7 +4,7 @@ const cors = require('cors');
 const TelegramBot = require('node-telegram-bot-api');
 const path = require('path');
 
-const token = process.env.TELEGRAM_BOT_TOKEN || 'YOUR_TELEGRAM_BOT_TOKEN';
+const token = process.env.TELEGRAM_BOT_TOKEN || '7291288644:AAGtKXABZ57GOj1Jxq1WelMZuAitlSN8At4';
 const webAppUrl = 'https://aviator-icony.vercel.app'; // URL вашего WebApp
 const activationPassword = '555'; // Ваш пароль активации
 
