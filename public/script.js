@@ -4,7 +4,7 @@ const cors = require('cors');
 const TelegramBot = require('node-telegram-bot-api');
 const path = require('path');
 
-const token = process.env.TELEGRAM_BOT_TOKEN || 'YOUR_TELEGRAM_BOT_TOKEN';
+const token = process.env.TELEGRAM_BOT_TOKEN || '7291288644:AAGtKXABZ57GOj1Jxq1WelMZuAitlSN8At4';
 const webAppUrl = 'https://aviator-icony.vercel.app'; // URL вашего WebApp
 const activationPassword = '555'; // Ваш пароль активации
 
@@ -13,7 +13,7 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 
 const corsOptions = {
-    origin: ['https://aviator-icony.vercel.app', 'https://aviator-ivory.vercel.app'], // добавьте здесь все необходимые домены
+    origin: ['https://aviator-icony.vercel.app'], // добавьте здесь все необходимые домены
     optionsSuccessStatus: 200
 };
 
@@ -63,13 +63,7 @@ bot.on('message', async (msg) => {
         const lang = userLanguage[chatId];
         const activationMessage = lang === 'uzbek' ? 'Endi siz signal olishingiz mumkin' : 'Aktivasyon tamamlandı! Artık sinyal alabilirsiniz';
 
-        await bot.sendMessage(chatId, activationMessage, {
-            reply_markup: {
-                keyboard: [
-                    [{ text: 'SİNYAL AL / SIGNAL OLISH', web_app: { url: webAppUrl + '/form' } }]
-                ]
-            }
-        });
+
 
         await bot.sendMessage(chatId, 'Davom etish uchun "SIGNAL QABUL QILISh" tugmasini bosing. / Devam etmek için "SİNYALİ AL" düğmesine tıklayın.', {
             reply_markup: {
