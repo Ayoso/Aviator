@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,10 +16,7 @@
     </div>
     <div class="coefficients-wrapper">
         <div class="background-video-container">
-            <video id="backgroundVideo" class="background-video" muted loop>
-                <source src="/Center-2473219%201280.gif" type="video/mp4">
-            </video>
-            <button id="playButton" onclick="playVideo()">Play Video</button>
+            <img class="background-video" src="/Center-2473219%201280.gif" alt="Background GIF">
         </div>
         <div class="coefficients-container" id="coefficientsContainer">
             <div class="coefficient" id="coefficient1"></div>
@@ -39,24 +37,8 @@
         <hr class="info-line">
     </div>
     <button class="button get-signal-button" id="getSignalButton">GET SIGNAL</button>
+
 </div>
-
 <script src="script.js"></script>
-<script>
-    function playVideo() {
-        const video = document.getElementById("backgroundVideo");
-        const playButton = document.getElementById("playButton");
-        video.play();
-        playButton.style.display = 'none';
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const video = document.getElementById("backgroundVideo");
-        video.play().catch(function() {
-            const playButton = document.getElementById("playButton");
-            playButton.style.display = 'block';
-        });
-    });
-</script>
 </body>
 </html>
