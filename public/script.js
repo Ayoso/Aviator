@@ -1,4 +1,4 @@
-const webAppUrl = 'https://aviator-icony.vercel.app'; // Основной URL вашего задеплоенного WebApp3
+const webAppUrl = 'https://aviator-icony.vercel.app'; // Основной URL вашего задеплоенного WebApp
 const oldObject = { a: 1 };
 const newObject = Object.assign({}, oldObject); // Новый метод
 const coefficientsContainer = document.getElementById('coefficientsContainer');
@@ -6,7 +6,6 @@ const timeContainer = document.getElementById('timeContainer');
 const chanceContainer = document.getElementById('chanceContainer');
 const loaderBar = document.querySelector('.loader-bar');
 const getSignalButton = document.getElementById('getSignalButton');
-const goToGameButton = document.getElementById('goToGameButton');
 const airplane = document.querySelector('.airplane'); // Добавлено для анимации самолета
 
 let loadingFinished = true; // Устанавливаем начальное значение в true
@@ -50,11 +49,12 @@ function fetchCoefficients() {
             console.log('Коэффициенты получены:', data);
             setTimeout(() => {
                 updateData(data);
-                loaderBar.style.animation = 'none';
-                loaderBar.style.width = '0';
-                airplane.style.animation = 'none';
+                loaderBar.classList.remove('loading');
+                airplane.classList.remove('flying');
+                void loaderBar.offsetWidth;
                 void airplane.offsetWidth;
-                airplane.style.animation = 'airplaneFly 10s linear infinite';
+                loaderBar.classList.add('loading');
+                airplane.classList.add('flying');
                 loadingFinished = true;
             }, 10000);
         })
@@ -69,16 +69,10 @@ if (getSignalButton) {
         console.log('Кнопка GET SIGNAL нажата');
         if (loadingFinished) {
             loadingFinished = false;
-            loaderBar.style.animation = 'none';
+            loaderBar.classList.remove('loading');
             void loaderBar.offsetWidth;
-            loaderBar.style.animation = 'loadAnimation 10s linear';
+            loaderBar.classList.add('loading');
             fetchCoefficients();
         }
-    });
-}
-
-if (goToGameButton) {
-    goToGameButton.addEventListener('click', () => {
-        window.location.href = 'https://example.com/game';
     });
 }
