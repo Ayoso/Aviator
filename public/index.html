@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +7,6 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
 <div class="container">
     <div class="header">
         <img src="https://cbpm.com.br/wp-content/uploads/2023/11/logo.png" alt="Aviator Logo" class="logo">
@@ -16,7 +14,9 @@
     </div>
     <div class="coefficients-wrapper">
         <div class="background-video-container">
-            <img class="background-video" src="/Center-2473219%201280.gif" alt="Background GIF">
+            <video class="background-video" autoplay muted loop>
+                <source src="/Center-2473219%201280.webm" type="video/webm">
+            </video>
         </div>
         <div class="coefficients-container" id="coefficientsContainer">
             <div class="coefficient" id="coefficient1"></div>
@@ -37,7 +37,6 @@
         <hr class="info-line">
     </div>
     <button class="button get-signal-button" id="getSignalButton">GET SIGNAL</button>
-
 </div>
 <script src="script.js"></script>
 </body>
