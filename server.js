@@ -5,20 +5,16 @@ const TelegramBot = require('node-telegram-bot-api');
 const path = require('path');
 
 const token = process.env.TELEGRAM_BOT_TOKEN || '7291288644:AAGtKXABZ57GOj1Jxq1WelMZuAitlSN8At4';
-const webAppUrl = 'https://aviator-icony.vercel.app'; // URL вашего WebApp
-const activationPassword = '555'; // Ваш пароль активации
+const webAppUrl = 'https://aviator-icony.vercel.app';
+const activationPassword = '555';
 
-const bot = new TelegramBot(token, { webHook: true });
+const bot = new TelegramBot(token, { polling: true });
 const app = express();
 const PORT = process.env.PORT || 8000;
-const corsOptions = {
-    origin: 'https://aviator-icony.vercel.app',
-    optionsSuccessStatus: 200
-};
 
-bot.setWebHook(`${webAppUrl}/bot${token}`);
-
-app.use(cors(corsOptions));
+app.use(cors({
+    origin: ['https://aviator-icony.vercel.app']
+}));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -43,14 +39,14 @@ bot.on('message', async (msg) => {
         bot.once('message', async (msg) => {
             const chosenLanguage = msg.text.toLowerCase();
 
-            if (chosenLanguage.includes('узбек') || chosenLanguage.includes('oʻzbek')) {
+            if (chosenLanguage.includes('oʻzbek')) {
                 userLanguage[chatId] = 'uzbek';
                 await bot.sendMessage(chatId, 'Endi siz signal olishingiz mumkin', {
                     reply_markup: {
                         remove_keyboard: true
                     }
                 });
-            } else if (chosenLanguage.includes('турецкий') || chosenLanguage.includes('türkçe')) {
+            } else if (chosenLanguage.includes('türkçe')) {
                 userLanguage[chatId] = 'turkish';
                 await bot.sendMessage(chatId, 'Aktivasyon tamamlandı! Artık sinyal alabilirsiniz', {
                     reply_markup: {
@@ -58,7 +54,7 @@ bot.on('message', async (msg) => {
                     }
                 });
             } else {
-                await bot.sendMessage(chatId, 'Dilni tanlagan tilni tanlang: Oʻzbekcha yoki Türkçe / Dilni tanlagan tilni tanlang: Oʻzbekcha yoki Türkçe');
+                await bot.sendMessage(chatId, 'Dilni tanlagan tilni tanlang: Oʻzbekcha yoki Türkçe');
             }
 
             await bot.sendMessage(chatId, 'faollashtirish parolingizni kiriting: / aktivasyon şifrenizi girin', {
@@ -73,14 +69,6 @@ bot.on('message', async (msg) => {
 
         await bot.sendMessage(chatId, activationMessage, {
             reply_markup: {
-                keyboard: [
-                    [{ text: 'SİNYAL AL / SIGNAL OLISH', web_app: { url: webAppUrl + '/form' } }]
-                ]
-            }
-        });
-
-        await bot.sendMessage(chatId, 'Davom etish uchun "SIGNAL QABUL QILISh" tugmasini bosing. / Devam etmek için "SİNYALİ AL" düğmesine tıklayın.', {
-            reply_markup: {
                 inline_keyboard: [
                     [{ text: 'SİNYAL AL / SIGNAL OLISH', web_app: { url: webAppUrl } }]
                 ]
@@ -92,11 +80,6 @@ bot.on('message', async (msg) => {
 
         await bot.sendMessage(chatId, errorMessage);
     }
-});
-
-app.post(`/bot${token}`, (req, res) => {
-    bot.processUpdate(req.body);
-    res.sendStatus(200);
 });
 
 app.post('/web-data', async (req, res) => {
@@ -127,37 +110,30 @@ function generateRandomCoefficients() {
     return [coefficient1, coefficient2];
 }
 
-// Обработка GET-запросов для /get-coefficients
 app.get('/get-coefficients', (req, res) => {
     try {
         currentCoefficients = generateRandomCoefficients();
-        console.log('Отправка коэффициентов:', currentCoefficients);
         res.json({
             coefficient1: parseFloat(currentCoefficients[0]),
             coefficient2: parseFloat(currentCoefficients[1])
         });
     } catch (error) {
-        console.error('Ошибка при генерации коэффициентов:', error);
         res.status(500).json({ error: 'Ошибка при генерации коэффициентов' });
     }
 });
 
-// Обработка POST-запросов для /get-coefficients
 app.post('/get-coefficients', (req, res) => {
     try {
         currentCoefficients = generateRandomCoefficients();
-        console.log('Отправка коэффициентов:', currentCoefficients);
         res.json({
             coefficient1: parseFloat(currentCoefficients[0]),
             coefficient2: parseFloat(currentCoefficients[1])
         });
     } catch (error) {
-        console.error('Ошибка при генерации коэффициентов:', error);
         res.status(500).json({ error: 'Ошибка при генерации коэффициентов' });
     }
 });
 
-// Логирование запросов
 app.use((req, res, next) => {
     console.log(`${req.method} ${req.url}`);
     next();
@@ -169,4 +145,4 @@ app.listen(PORT, () => {
     console.error(`Не удалось запустить сервер на порту ${PORT}: ${err.message}`);
 });
 
-module.exports = app; // Экспорт сервера
+module.exports = app;
