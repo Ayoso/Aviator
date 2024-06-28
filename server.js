@@ -5,7 +5,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const path = require('path');
 
 const token = process.env.TELEGRAM_BOT_TOKEN || '7291288644:AAGtKXABZ57GOj1Jxq1WelMZuAitlSN8At4';
-const webAppUrl = 'https://aviator-icony.vercel.app';
+const webAppUrl = 'https://aviator-miwke6qdy-ayosos-projects.vercel.app';
 const activationPassword = '555';
 
 const bot = new TelegramBot(token, { polling: true });
@@ -13,7 +13,7 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 
 app.use(cors({
-    origin: ['https://aviator-icony.vercel.app', 'https://aviator-l0fnsq3bw-ayosos-projects.vercel.app'], // Добавьте все необходимые домены
+    origin: ['https://aviator-miwke6qdy-ayosos-projects.vercel.app', ' https://aviator-miwke6qdy-ayosos-projects.vercel.app '], // Добавьте все необходимые домены
     methods: ['GET', 'POST'], // Разрешите необходимые методы
     allowedHeaders: ['Content-Type', 'Authorization'] // Разрешите необходимые заголовки
 }));
