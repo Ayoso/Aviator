@@ -107,10 +107,15 @@ app.post('/web-data', async (req, res) => {
 });
 
 function generateRandomCoefficients() {
-    const coefficient2 = (Math.random() * 5 + 1.1).toFixed(2); // Минимум 1.1 вместо 1
-    const coefficient1 = (Math.random() * (coefficient2 / 2)).toFixed(2);
+    let coefficient2 = (Math.random() * 5 + 1).toFixed(2);
+    let coefficient1 = (Math.random() * (coefficient2 / 2.5) + 1.1).toFixed(2);
+
+    // Ensure coefficient2 is at least 2.5 times coefficient1
+    coefficient2 = Math.max(coefficient2, (coefficient1 * 2.5)).toFixed(2);
+
     return [coefficient1, coefficient2];
 }
+
 app.get('/get-coefficients', (req, res) => {
     try {
         currentCoefficients = generateRandomCoefficients();

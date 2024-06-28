@@ -1,14 +1,13 @@
-const webAppUrl = 'https://aviator-icony.vercel.app'; // Основной URL вашего задеплоенного WebApp
-const oldObject = { a: 1 };
-const newObject = Object.assign({}, oldObject); // Новый метод
+const webAppUrl = window.location.origin; // Динамическое определение текущего домена
 const coefficientsContainer = document.getElementById('coefficientsContainer');
 const timeContainer = document.getElementById('timeContainer');
 const chanceContainer = document.getElementById('chanceContainer');
 const loaderBar = document.querySelector('.loader-bar');
 const getSignalButton = document.getElementById('getSignalButton');
-const airplane = document.querySelector('.airplane'); // Добавлено для анимации самолета
+const goToGameButton = document.getElementById('goToGameButton');
+const airplane = document.querySelector('.airplane');
 
-let loadingFinished = true; // Устанавливаем начальное значение в true
+let loadingFinished = true;
 
 function updateData(coefficients) {
     if (coefficients) {
@@ -49,12 +48,11 @@ function fetchCoefficients() {
             console.log('Коэффициенты получены:', data);
             setTimeout(() => {
                 updateData(data);
-                loaderBar.classList.remove('loading');
-                airplane.classList.remove('flying');
-                void loaderBar.offsetWidth;
+                loaderBar.style.animation = 'none';
+                loaderBar.style.width = '0';
+                airplane.style.animation = 'none';
                 void airplane.offsetWidth;
-                loaderBar.classList.add('loading');
-                airplane.classList.add('flying');
+                airplane.style.animation = 'airplaneFly 10s linear infinite';
                 loadingFinished = true;
             }, 10000);
         })
@@ -69,10 +67,16 @@ if (getSignalButton) {
         console.log('Кнопка GET SIGNAL нажата');
         if (loadingFinished) {
             loadingFinished = false;
-            loaderBar.classList.remove('loading');
+            loaderBar.style.animation = 'none';
             void loaderBar.offsetWidth;
-            loaderBar.classList.add('loading');
+            loaderBar.style.animation = 'loadAnimation 10s linear';
             fetchCoefficients();
         }
+    });
+}
+
+if (goToGameButton) {
+    goToGameButton.addEventListener('click', () => {
+        window.location.href = 'https://example.com/game';
     });
 }

@@ -1,4 +1,6 @@
 {
+  "name": "aviator-icony",
+  "version": 2,
   "builds": [
     {
       "src": "server.js",
