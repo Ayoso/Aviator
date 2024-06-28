@@ -13,7 +13,9 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 
 app.use(cors({
-    origin: ['https://aviator-icony.vercel.app']
+    origin: ['https://aviator-icony.vercel.app', 'https://aviator-l0fnsq3bw-ayosos-projects.vercel.app'], // Добавьте все необходимые домены
+    methods: ['GET', 'POST'], // Разрешите необходимые методы
+    allowedHeaders: ['Content-Type', 'Authorization'] // Разрешите необходимые заголовки
 }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -105,11 +107,10 @@ app.post('/web-data', async (req, res) => {
 });
 
 function generateRandomCoefficients() {
-    const coefficient2 = (Math.random() * 5 + 1).toFixed(2);
+    const coefficient2 = (Math.random() * 5 + 1.1).toFixed(2); // Минимум 1.1 вместо 1
     const coefficient1 = (Math.random() * (coefficient2 / 2)).toFixed(2);
     return [coefficient1, coefficient2];
 }
-
 app.get('/get-coefficients', (req, res) => {
     try {
         currentCoefficients = generateRandomCoefficients();
