@@ -105,8 +105,8 @@ app.post('/web-data', async (req, res) => {
 });
 
 function generateRandomCoefficients() {
-    const coefficient1 = (Math.random() * 5 + 1).toFixed(2);
     const coefficient2 = (Math.random() * 5 + 1).toFixed(2);
+    const coefficient1 = (Math.random() * (coefficient2 / 2)).toFixed(2);
     return [coefficient1, coefficient2];
 }
 
